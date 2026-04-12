@@ -3,7 +3,12 @@ import fetch from "node-fetch";
 export const chatWithModel = async (req, res) => {
   const { message, history } = req.body;
 
-  const prompt = `${history || ""}\nuser: ${message}\nassistant:`;
+  const prompt = `
+  You are a helpful assistant.
+  Give short, clear answers.
+  Avoid unnecessary explanation.
+  
+  ${history || ""}\nuser: ${message}\nassistant:`;
 
   try {
     const response = await fetch("http://localhost:11434/api/generate", {
@@ -12,9 +17,12 @@ export const chatWithModel = async (req, res) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "tinyllama",
+        model: "phi3:mini",
         prompt,
         stream: true,
+        options: {
+          num_predict: 200, //limit response lenght
+        }
       }),
     });
 

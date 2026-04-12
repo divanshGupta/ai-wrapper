@@ -1,9 +1,10 @@
 type Props = {
   role: "user" | "assistant";
   content: string;
+  isStreaming?: boolean;
 };
 
-export default function Message({ role, content }: Props) {
+export default function Message({ role, content, isStreaming }: Props) {
   const isUser = role === "user";
 
   return (
@@ -17,6 +18,9 @@ export default function Message({ role, content }: Props) {
         }`}
       >
         {content}
+        {isStreaming && role === "assistant" && (
+          <span className="animate-pulse ml-1">▍</span>
+        )}
         
       </div>
 
