@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+:root {
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #111111;
+  --bg-tertiary: #1a1a1a;
+
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1aa;
+
+  --border-color: #27272a;
+
+  --accent: #10a37f; /* ChatGPT green vibe */
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
