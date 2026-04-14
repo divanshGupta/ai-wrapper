@@ -1,7 +1,8 @@
 import fetch from "node-fetch";
+import axios from "axios";
 
 export const chatWithModel = async (req, res) => {
-  const { message, history } = req.body;
+  const { message, history, model } = req.body;
 
   const prompt = `
   You are a helpful assistant.
@@ -17,7 +18,7 @@ export const chatWithModel = async (req, res) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "phi3:mini",
+        model: model || "tinyllama",
         prompt,
         stream: true,
         options: {
@@ -46,5 +47,21 @@ export const chatWithModel = async (req, res) => {
   } catch (error) {
     console.error("Streaming error:", error);
     res.status(500).send("Streaming failed");
+  }
+};
+
+export const getModels = async (req, res) => {
+  try {
+    const response = await axios.get("http://localhost:11434/api/tags");
+
+    const rawModels = response.data?.models || [];
+
+    const models = rawModels.map((m) => m.name || m.model);
+
+    res.json(models);
+
+  } catch (err) {
+    console.error("Model fetch error:", err.message);
+    res.status(500).json([]);
   }
 };

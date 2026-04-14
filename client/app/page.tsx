@@ -4,7 +4,7 @@ import Sidebar from "@/components/layout/Sidebar"
 import useChat from "@/hooks/useChat";
 
 export default function Home() {
-  const {chats, currentChat, currentChatId, setCurrentChatId, createNewChat, loading, sendMessage, deleteChat} = useChat();
+  const {chats, currentChat, currentChatId, setCurrentChatId, createNewChat, loading, sendMessage, deleteChat, model, setModel, availableModels} = useChat();
   return (
     <div className="flex h-screen bg-(--bg-primary) text-(--text-primary)">
 
@@ -16,6 +16,9 @@ export default function Home() {
           setCurrentChatId={setCurrentChatId}
           createNewChat={createNewChat}
           deleteChat={deleteChat}
+          model={model}
+          setModel={setModel}
+          availableModels={availableModels}
         />
       </div>
 

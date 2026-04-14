@@ -15,6 +15,8 @@ type Chat = {
 
 export default function useChat() {
   const [chats, setChats] = useState<Chat[]>([]);
+  const [model, setModel] = useState<string>("tinyllama");
+  const [availableModels, setAvailableModels] = useState<string[]>([]);
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -38,6 +40,16 @@ export default function useChat() {
     }
   }, [chats, currentChatId]);
 
+  // persist selected model in localstorage
+  useEffect(() => {
+    const savedModel = localStorage.getItem("model");
+    if (savedModel) setModel(savedModel);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("model", model);
+  }, [model]);
+  
   const createNewChat = () => {
     const newChat: Chat = {
       id: crypto.randomUUID(),
@@ -111,6 +123,7 @@ export default function useChat() {
         body: JSON.stringify({
           message: input,
           history,
+          model,
         }),
       });
 
@@ -194,6 +207,27 @@ export default function useChat() {
     });
   };
 
+  useEffect(() => {
+  const fetchModels = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/models");
+      const data = await res.json();
+
+      if (Array.isArray(data)) {
+        setAvailableModels(data);
+      } else {
+        setAvailableModels([]);
+      }
+
+    } catch (err) {
+      console.error("Failed to load models");
+      setAvailableModels([]);
+    }
+  };
+
+  fetchModels();
+}, []);
+
   return {
     chats,
     currentChat,
@@ -203,5 +237,7 @@ export default function useChat() {
     sendMessage,
     deleteChat,
     loading,
+    model, setModel,
+    availableModels,
   };
 }
