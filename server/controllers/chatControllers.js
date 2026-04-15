@@ -21,9 +21,6 @@ export const chatWithModel = async (req, res) => {
         model: model || "tinyllama",
         prompt,
         stream: true,
-        options: {
-          num_predict: 200, //limit response lenght
-        }
       }),
     });
 

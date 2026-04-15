@@ -110,7 +110,11 @@ export default function useChat() {
 
     setLoading(true);
 
-    const history = updatedMessages
+    const MAX_CONTEXT = 4; // 2 user + 2 assistant
+
+    const trimmedMessages = updatedMessages.slice(-MAX_CONTEXT);
+
+    const history = trimmedMessages
       .map((m) => `${m.role}: ${m.content}`)
       .join("\n");
 
